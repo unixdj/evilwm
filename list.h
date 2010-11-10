@@ -19,5 +19,6 @@ struct list *list_to_tail(struct list *list, void *data);
 
 /* Returns element in list: */
 struct list *list_find(struct list *list, void *data);
+struct list *list_find_prev(struct list *list, void *data);
 
 #endif  /* def __LIST_H__ */

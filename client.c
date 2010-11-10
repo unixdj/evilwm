@@ -46,6 +46,16 @@ void client_lower(Client *c) {
 	ewmh_set_net_client_list_stacking(c->screen);
 }
 
+void client_tuck(Client *c, Client *p) {
+	struct list *prev = list_find(clients_stacking_order, p);
+	if (!prev)
+		return;
+	clients_stacking_order = list_delete(clients_stacking_order, c);
+	prev->next = list_prepend(prev->next, c);
+	XRestackWindows(dpy, (Window[]){p->parent, c->parent}, 2);
+	ewmh_set_net_client_list_stacking(c->screen);
+}
+
 void set_wm_state(Client *c, int state) {
 	/* Using "long" for the type of "data" looks wrong, but the
 	 * fine people in the X Consortium defined it this way

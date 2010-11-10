@@ -44,6 +44,7 @@ static void handle_key_event(XKeyEvent *e) {
 				XUngrabKeyboard(dpy, CurrentTime);
 			}
 			ewmh_select_client(current);
+			next_done();
 			break;
 		case KEY_DOCK_TOGGLE:
 			set_docks_visible(current_screen, !current_screen->docks_visible);

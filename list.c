@@ -75,3 +75,15 @@ struct list *list_find(struct list *list, void *data) {
 	}
 	return NULL;
 }
+
+/* Find list element before element containing data */
+struct list *list_find_prev(struct list *list, void *data) {
+	struct list *elem;
+	if (!list || list->data == data)
+		return NULL;
+	for (elem = list; elem->next; elem = elem->next) {
+		if (elem->next->data == data)
+			return elem;
+	}
+	return NULL;
+}
