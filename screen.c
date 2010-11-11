@@ -405,16 +405,10 @@ void maximise_client(Client *c, int action, int hv) {
 	discard_enter_events();
 }
 
-static Client *cover = NULL;
-
 void next(void) {
 	struct list *newl = list_find(clients_tab_order, current);
-	struct list *prev;
 	Client *newc = current;
-	if (cover) {
-		client_tuck(current, cover);
-		cover = NULL;
-	}
+	client_tuck(current);
 	do {
 		if (newl) {
 			newl = newl->next;
@@ -438,21 +432,14 @@ void next(void) {
 #endif
 	if (!newc)
 		return;
-	prev = list_find_prev(clients_stacking_order, newc);
-	if (prev)
-		cover = prev->data;
 	client_show(newc);
-	client_raise(newc);
+	client_temp_raise(newc);
 	select_client(newc);
 #ifdef WARP_POINTER
 	setmouse(newc->window, newc->width + newc->border - 1,
 			newc->height + newc->border - 1);
 #endif
 	discard_enter_events();
-}
-
-void next_done(void) {
-	cover = NULL;
 }
 
 #ifdef VWM

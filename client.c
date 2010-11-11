@@ -34,6 +34,10 @@ void client_show(Client *c) {
 	set_wm_state(c, NormalState);
 }
 
+void client_temp_raise(Client *c) {
+	XRaiseWindow(dpy, c->parent);
+}
+
 void client_raise(Client *c) {
 	XRaiseWindow(dpy, c->parent);
 	clients_stacking_order = list_to_tail(clients_stacking_order, c);
@@ -46,14 +50,10 @@ void client_lower(Client *c) {
 	ewmh_set_net_client_list_stacking(c->screen);
 }
 
-void client_tuck(Client *c, Client *p) {
-	struct list *prev = list_find(clients_stacking_order, p);
-	if (!prev)
-		return;
-	clients_stacking_order = list_delete(clients_stacking_order, c);
-	prev->next = list_prepend(prev->next, c);
-	XRestackWindows(dpy, (Window[]){p->parent, c->parent}, 2);
-	ewmh_set_net_client_list_stacking(c->screen);
+void client_tuck(Client *c) {
+	struct list *elem = list_find(clients_stacking_order, c);
+	if (elem && elem->next)
+		XRestackWindows(dpy, (Window[]){((Client *)elem->next->data)->parent, c->parent}, 2);
 }
 
 void set_wm_state(Client *c, int state) {

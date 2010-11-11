@@ -253,9 +253,10 @@ extern int wm_exit;
 Client *find_client(Window w);
 void client_hide(Client *c);
 void client_show(Client *c);
+void client_temp_raise(Client *c);
 void client_raise(Client *c);
 void client_lower(Client *c);
-void client_tuck(Client *c, Client *p);
+void client_tuck(Client *c);
 void gravitate_border(Client *c, int bw);
 void select_client(Client *c);
 #ifdef VWM
@@ -293,7 +294,6 @@ void maximise_client(Client *c, int action, int hv);
 void show_info(Client *c, unsigned int keycode);
 void sweep(Client *c);
 void next(void);
-void next_done(void);
 #ifdef VWM
 void switch_vdesk(ScreenInfo *s, unsigned int v);
 #endif
