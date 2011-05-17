@@ -1,5 +1,5 @@
 /* evilwm - Minimalist Window Manager for X
- * Copyright (C) 1999-2010 Ciaran Anscomb <evilwm@6809.org.uk>
+ * Copyright (C) 1999-2011 Ciaran Anscomb <evilwm@6809.org.uk>
  * see README for license and other details. */
 
 #include <stdlib.h>
@@ -65,6 +65,9 @@ static void handle_key_event(XKeyEvent *e) {
 				switch_vdesk(current_screen,
 						current_screen->vdesk + 1);
 			}
+			break;
+		case KEY_TOGGLEDESK:
+			switch_vdesk(current_screen, current_screen->old_vdesk);
 			break;
 #endif
 		default: break;
@@ -163,7 +166,7 @@ move_client:
 	setmouse(c->window, c->width + c->border - 1,
 			c->height + c->border - 1);
 #endif
-	discard_enter_events();
+	discard_enter_events(c);
 	return;
 }
 
@@ -284,7 +287,7 @@ static void handle_configure_request(XConfigureRequestEvent *e) {
 		}
 		do_window_changes(e->value_mask, &wc, c, 0);
 		if (c == current) {
-			discard_enter_events();
+			discard_enter_events(c);
 		}
 	} else {
 		LOG_XENTER("XConfigureWindow(window=%lx, value_mask=%lx)", (unsigned int)e->window, e->value_mask);
