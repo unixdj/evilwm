@@ -7,7 +7,7 @@ VPATH=$(src_dir)
 ############################################################################
 # Installation paths
 
-prefix = /usr
+prefix = /usr/local
 bindir = $(prefix)/bin
 datarootdir = $(prefix)/share
 mandir = $(datarootdir)/man
