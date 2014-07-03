@@ -45,7 +45,7 @@ OPT_CPPFLAGS += -DSTDIO
 OPT_CPPFLAGS += -DVWM
 
 # Uncomment to move pointer around on certain actions.
-OPT_CPPFLAGS += -DWARP_POINTER
+#OPT_CPPFLAGS += -DWARP_POINTER
 
 # Uncomment to use pango for rendering title text
 OPT_CPPFLAGS += -DPANGO $(shell pkg-config --cflags-only-I freetype2 pango pangoxft)
@@ -79,7 +79,7 @@ OPT_LDLIBS   += $(shell pkg-config --libs pango pangoxft)
 CC = gcc
 
 # Override if desired:
-CFLAGS = -Os -std=c99
+CFLAGS = -Os
 WARN = -Wall -W -Wstrict-prototypes -Wpointer-arith -Wcast-align \
 	-Wshadow -Waggregate-return -Wnested-externs -Winline -Wwrite-strings \
 	-Wundef -Wsign-compare -Wmissing-prototypes -Wredundant-decls
@@ -102,7 +102,7 @@ INSTALL_PROGRAM = $(INSTALL) -m 0755 $(INSTALL_STRIP)
 ############################################################################
 # You shouldn't need to change anything beyond this point
 
-version = 1.1.0
+version = 1.1.1
 version := $(shell git describe --dirty || echo $(version))
 distname = evilwm-$(version)
 
@@ -111,9 +111,9 @@ distname = evilwm-$(version)
 #  _POSIX_C_SOURCE=200112L for sigaction
 EVILWM_CPPFLAGS = $(CPPFLAGS) $(OPT_CPPFLAGS) -DVERSION=\"$(version)\" \
 	-D_SVID_SOURCE=1 \
-	-D_POSIX_C_SOURCE=200112L \
-	$(NULL)
+	-D_POSIX_C_SOURCE=200112L
 EVILWM_CFLAGS = -std=c99 $(CFLAGS) $(WARN)
+EVILWM_LDFLAGS = $(LDFLAGS)
 EVILWM_LDLIBS = -lX11 $(OPT_LDLIBS) $(LDLIBS)
 
 HEADERS = evilwm.h keymap.h list.h log.h xconfig.h
@@ -128,7 +128,7 @@ $(OBJS): $(HEADERS)
 	$(CC) $(EVILWM_CFLAGS) $(EVILWM_CPPFLAGS) -c $<
 
 evilwm$(EXEEXT): $(OBJS)
-	$(CC) -o $@ $(OBJS) $(LDFLAGS) $(EVILWM_LDLIBS)
+	$(CC) -o $@ $(OBJS) $(EVILWM_LDFLAGS) $(EVILWM_LDLIBS)
 
 .PHONY: install
 install: evilwm$(EXEEXT)
