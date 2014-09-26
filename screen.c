@@ -435,12 +435,13 @@ void set_docks_visible(ScreenInfo *s, int is_visible) {
 }
 
 static int scale_pos(int new_screen_size, int old_screen_size, int cli_pos, int cli_size, int border) {
-	cli_size += 2 * border;
+	cli_size += border << 1;
 	new_screen_size -= cli_size;
 	old_screen_size -= cli_size;
 	if (old_screen_size <= 0 || new_screen_size <= 0)
 		return cli_pos;
-	return new_screen_size * (cli_pos - border) / old_screen_size + border;
+	return ((((long long)new_screen_size * (cli_pos - border) << 1) | 1)
+	    / old_screen_size >> 1) + border;
 }
 
 static void fix_screen_client(Client *c, const PhysicalScreen *old_phy) {
