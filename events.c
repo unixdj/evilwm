@@ -6,7 +6,6 @@
 #include <string.h>
 #include <errno.h>
 #include <sys/select.h>
-#include <X11/XKBlib.h>
 #include "evilwm.h"
 #include "log.h"
 
@@ -24,7 +23,7 @@ const char *debug_atom_name(Atom a) {
 #endif
 
 static void handle_key_event(XKeyEvent *e) {
-	KeySym key = XkbKeycodeToKeysym(dpy, e->keycode, 0, 0);
+	KeySym key = XKeycodeToKeysym(dpy,e->keycode,0);
 	Client *c;
 	int width_inc, height_inc;
 	ScreenInfo *current_screen;
@@ -41,9 +40,9 @@ static void handle_key_event(XKeyEvent *e) {
 				XEvent ev;
 				do {
 					XMaskEvent(dpy, KeyPressMask|KeyReleaseMask, &ev);
-					if (ev.type == KeyPress && XkbKeycodeToKeysym(dpy, ev.xkey.keycode, 0, 0) == KEY_NEXT)
+					if (ev.type == KeyPress && XKeycodeToKeysym(dpy,ev.xkey.keycode,0) == KEY_NEXT)
 						next();
-				} while (ev.type == KeyPress || XkbKeycodeToKeysym(dpy, ev.xkey.keycode, 0, 0) == KEY_NEXT);
+				} while (ev.type == KeyPress || XKeycodeToKeysym(dpy,ev.xkey.keycode,0) == KEY_NEXT);
 				XUngrabKeyboard(dpy, CurrentTime);
 			}
 			ewmh_select_client(current);
